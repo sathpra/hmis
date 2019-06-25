@@ -232,10 +232,18 @@
                                                                      target="#{reportFormatController.current}" ></f:setPropertyActionListener>
                                     </p:commandButton>
                                     <p:commandButton value="List Investigation Using this Format" ajax="false" 
-                                                     action="report_format_category">
+                                                    >
                                         <f:setPropertyActionListener value="#{commonReportItemController.category}" 
                                                                      target="#{investigationController.categoryForFormat}" ></f:setPropertyActionListener>
                                     </p:commandButton>
+                                    
+                                     <p:commandButton value="Back" ajax="false" 
+                                                      action="/lab/administration"
+                                                    >
+                                    </p:commandButton>
+                                    
+                                    
+                                    
                                     <p:dataTable value="#{investigationController.investigationWithSelectedFormat}"
                                                  var="i" rowKey="#{i.id}" >
                                         <p:column >

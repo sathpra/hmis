@@ -101,6 +101,7 @@ public class InvestigationItemController implements Serializable {
      * Properties
      */
     List<InvestigationItem> selectedItems;
+    List<InvestigationItem> selectedItemsToChange;
     private InvestigationItem current;
     private Investigation currentInvestigation;
     private List<InvestigationItem> items = null;
@@ -506,12 +507,12 @@ public class InvestigationItemController implements Serializable {
     }
 
     public void moveUpAllReportItems() {
-        if (getItems().isEmpty()) {
+        if (getSelectedItemsToChange().isEmpty()) {
             UtilityController.addErrorMessage("There is No items to move");
             return;
         }
 
-        for (ReportItem ri : getItems()) {
+        for (ReportItem ri : getSelectedItemsToChange()) {
             ri.setRiTop(ri.getRiTop() - movePercent);
             riFacade.edit(ri);
         }
@@ -520,12 +521,12 @@ public class InvestigationItemController implements Serializable {
     }
 
     public void moveLeftAllReportItems() {
-        if (getItems().isEmpty()) {
+        if (getSelectedItemsToChange().isEmpty()) {
             UtilityController.addErrorMessage("There is No items to move");
             return;
         }
 
-        for (ReportItem ri : getItems()) {
+        for (ReportItem ri : getSelectedItemsToChange()) {
             ri.setRiLeft(ri.getRiLeft() - movePercent);
             riFacade.edit(ri);
         }
@@ -534,12 +535,12 @@ public class InvestigationItemController implements Serializable {
     }
 
     public void moveDownAllReportItems() {
-        if (getItems().isEmpty()) {
+        if (getSelectedItemsToChange().isEmpty()) {
             UtilityController.addErrorMessage("There is No items to move");
             return;
         }
 
-        for (ReportItem ri : getItems()) {
+        for (ReportItem ri : getSelectedItemsToChange()) {
             ri.setRiTop(ri.getRiTop() + movePercent);
             riFacade.edit(ri);
         }
@@ -548,12 +549,12 @@ public class InvestigationItemController implements Serializable {
     }
 
     public void fixWidthAllReportItems() {
-        if (getItems().isEmpty()) {
+        if (getSelectedItemsToChange().isEmpty()) {
             UtilityController.addErrorMessage("There is No items to move");
             return;
         }
 
-        for (ReportItem ri : getItems()) {
+        for (ReportItem ri : getSelectedItemsToChange()) {
             ri.setRiWidth(fixWidth);
             riFacade.edit(ri);
         }
@@ -562,12 +563,12 @@ public class InvestigationItemController implements Serializable {
     }
 
     public void fixHeightAllReportItems() {
-        if (getItems().isEmpty()) {
+        if (getSelectedItemsToChange().isEmpty()) {
             UtilityController.addErrorMessage("There is No items to move");
             return;
         }
 
-        for (ReportItem ri : getItems()) {
+        for (ReportItem ri : getSelectedItemsToChange()) {
             ri.setRiHeight(fixHeight);
             riFacade.edit(ri);
         }
@@ -576,12 +577,12 @@ public class InvestigationItemController implements Serializable {
     }
 
     public void moveRightAllReportItems() {
-        if (getAllReportItemList().isEmpty()) {
+        if (getSelectedItemsToChange().isEmpty()) {
             UtilityController.addErrorMessage("There is No items to move");
             return;
         }
 
-        for (ReportItem ri : getAllReportItemList()) {
+        for (ReportItem ri : getSelectedItemsToChange()) {
             ri.setRiLeft(ri.getRiLeft() + movePercent);
             riFacade.edit(ri);
         }
@@ -590,8 +591,11 @@ public class InvestigationItemController implements Serializable {
     }
 
     public void updateAllFontValues() {
-
-        for (ReportItem ri : getAllReportItemList()) {
+        if (getSelectedItemsToChange().isEmpty()) {
+            UtilityController.addErrorMessage("There is No items to update font");
+            return;
+        }
+        for (ReportItem ri : getSelectedItemsToChange()) {
             if (fontFamily != null) {
                 ri.setCssFontFamily(fontFamily);
                 riFacade.edit(ri);
@@ -813,7 +817,6 @@ public class InvestigationItemController implements Serializable {
                 } catch (Exception e) {
                     ri.setRiWidth(40);
                 }
-
 
                 if (ri.getHtmltext() == null || ri.getHtmltext().trim().equals("")) {
                     ri.setHtmltext(ri.getName());
@@ -2232,6 +2235,14 @@ public class InvestigationItemController implements Serializable {
 
     public void setImportantItems(List<InvestigationItem> importantItems) {
         this.importantItems = importantItems;
+    }
+
+    public List<InvestigationItem> getSelectedItemsToChange() {
+        return selectedItemsToChange;
+    }
+
+    public void setSelectedItemsToChange(List<InvestigationItem> selectedItemsToChange) {
+        this.selectedItemsToChange = selectedItemsToChange;
     }
 
     /**
