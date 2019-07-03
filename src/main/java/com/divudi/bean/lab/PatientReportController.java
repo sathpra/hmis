@@ -745,7 +745,7 @@ public class PatientReportController implements Serializable {
                     }
 
                     if (c.getCalculationType() == CalculationType.Power) {
-                        calString = calString + "Math.pow";
+                        calString = calString + " Math.pow ";
                     }
 
                     if (c.getCalculationType() == CalculationType.Comma) {
@@ -1731,7 +1731,7 @@ public class PatientReportController implements Serializable {
         currentPtIx = pi;
         createNewPatientReport(pi, ix);
         getCommonReportItemController().setCategory(ix.getReportFormat());
-        return "/lab_patient_report";
+        return "/lab/patient_report";
     }
 
     public List<PatientReport> getCustomerReports() {

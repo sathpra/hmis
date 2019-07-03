@@ -1212,6 +1212,7 @@ public class PatientInvestigationController implements Serializable {
                 ptLabel = zplTemplate;
                 ptLabel = ptLabel.replace("[name]", ps.getPatient().getPerson().getName());
                 ptLabel = ptLabel.replace("[barcode]", "" + ps.getIdStr());
+                ptLabel = ptLabel.replace("[insid]", "" + ps.getBill().getInsId());
                 List<Item> tpiics = testComponantsForPatientSample(ps);
                 tbis = "";
                 String temTube = "";
