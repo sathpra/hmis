@@ -1200,7 +1200,7 @@ public class PatientInvestigationController implements Serializable {
                 tbis += i.getItem().getName() + ", ";
                 if (i.getItem() instanceof Investigation) {
                     Investigation temIx = (Investigation) i.getItem();
-                    temTube = temIx.getInvestigationTube().getName();
+                    temTube = temIx.getInvestigationTube().getCode();
                 }
             }
             tbis = tbis.substring(0, tbis.length() - 2);
@@ -1220,7 +1220,7 @@ public class PatientInvestigationController implements Serializable {
                     tbis += i.getName() + ", ";
                     if (i instanceof Investigation) {
                         Investigation temIx = (Investigation) i;
-                        temTube = temIx.getInvestigationTube().getName();
+                        temTube = temIx.getInvestigationTube().getCode();
                     }
                 }
                 if (tbis.length() > 2) {
