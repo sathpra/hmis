@@ -205,7 +205,8 @@
                                         <p:ajax event="rowEditCancel" listener="#{billSearch.onEdit}" />  
                                         <p:column>
                                             <f:facet name="header">No</f:facet>
-                                            <h:outputLabel value="#{rowIndex+1}"/>
+                                            <h:outputLabel value="#{rowIndex+1}"/> -
+                                            <h:outputLabel value="#{bip.billItem.item.id}"/>
                                         </p:column>
                                         <p:column>
                                             <f:facet name="header">Item</f:facet>

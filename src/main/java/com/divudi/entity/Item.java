@@ -95,6 +95,7 @@ public class Item implements Serializable, Comparable<Item> {
     String name;
     String sname;
     String tname;
+    @Column(name = "code")
     String code;
     String barcode;
     String printName;
@@ -561,10 +562,12 @@ public class Item implements Serializable, Comparable<Item> {
     }
 
     public String getSname() {
+        System.out.println("get sname = " + sname);
         return sname;
     }
 
     public void setSname(String sname) {
+        System.out.println("set sname = " + sname);
         this.sname = sname;
     }
 
@@ -577,10 +580,12 @@ public class Item implements Serializable, Comparable<Item> {
     }
 
     public String getCode() {
+        System.out.println("get code = " + code);
         return code;
     }
 
     public void setCode(String code) {
+        System.out.println("set code = " + code);
         this.code = code;
     }
 

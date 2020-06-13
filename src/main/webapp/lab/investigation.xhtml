@@ -122,8 +122,12 @@
                                                     <h:outputText id="lblFullName" value="Full Name" ></h:outputText>
                                                     <p:inputText styleClass="longText pdInputText" autocomplete="off" id="txtFullName"  
                                                                  value="#{investigationController.current.fullName}"  ></p:inputText>
-                                                    <p:outputLabel value="Item Code"/>
+                                                    
+                                                    <p:outputLabel value="Code"/>
                                                     <p:inputText autocomplete="off" value="#{investigationController.current.code}"/>
+                                                    
+                                                    <p:outputLabel value="Sticker Printing Name"/>
+                                                    <p:inputText autocomplete="off" value="#{investigationController.current.sname}"/>
 
                                                     <h:outputText value="Category" ></h:outputText>
                                                     <p:selectOneMenu id="cmbCat"   value="#{investigationController.current.investigationCategory}" >

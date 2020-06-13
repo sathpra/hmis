@@ -1136,6 +1136,7 @@ public class PatientInvestigationController implements Serializable {
     }
 
     public void prepareSampleCollectionByRequest() {
+        System.out.println("prepareSampleCollectionByRequest");
         samplingRequestResponse = "#{";
         if (inputBillId == null || inputBillId.trim().equals("")) {
             samplingRequestResponse += "Login=0|Message=Bill Number not entered.}#";
@@ -1170,9 +1171,8 @@ public class PatientInvestigationController implements Serializable {
                 + "TEXT 20,65,\"3\",0,0,0,\"[tests]\"\r\n"
                 + "BARCODE 20,95, \"128\",60,1,0,2,2, \"[barcode]\"\r\n"
                 + "PRINT 1\r\n";
-        
-        
-         zplTemplate = "SIZE 53 mm, 28 mm\r\n"
+
+        zplTemplate = "SIZE 53 mm, 28 mm\r\n"
                 + "GAP 0,0\r\n"
                 + "DIRECTION 1\r\n"
                 + "CLS\r\n"
@@ -1180,6 +1180,8 @@ public class PatientInvestigationController implements Serializable {
                 + "TEXT 20,65,\"3\",0,0,0,\"[tests]\"\r\n"
                 + "TEXT 20,95,\"3\",0,0,0,\"[insid]\"\r\n"
                 + "PRINT 1\r\n";
+
+        System.out.println("zplTemplate = " + zplTemplate);
 
         String ptLabel = "";
         Bill tb;
@@ -1189,6 +1191,7 @@ public class PatientInvestigationController implements Serializable {
         samplingRequestResponse += "|message=";
 
         if (patientSamplesSet.isEmpty()) {
+            System.out.println("patientSamplesSet.isEmpty()" + patientSamplesSet);
             ptLabel = zplTemplate;
             ptLabel = ptLabel.replace("[name]", patientSamples.get(0).getBill().getPatient().getPerson().getName());
             ptLabel = ptLabel.replace("[barcode]", "" + patientSamples.get(0).getBill().getIdStr());
@@ -1197,18 +1200,36 @@ public class PatientInvestigationController implements Serializable {
             tbis = "";
             String temTube = "";
             for (BillItem i : tpiics) {
-                tbis += i.getItem().getName() + ", ";
+                Long tid = i.getItem().getId();
+                System.out.println("tid = " + tid);
+                if (tid != null) {
+                    Item tix = getItemFacade().find(i.getItem().getId());
+                    System.out.println("tix = " + tix);
+                    if (tix != null) {
+                        System.out.println("tix = " + tix.getCode());
+                    }
+                }
+                System.out.println("i = " + i);
+                System.out.println("i.getItem() = " + i.getItem());
+                System.out.println("i.getItem().getCode() = " + i.getItem().getCode());
+                tbis += i.getItem().getSname() + ", ";
                 if (i.getItem() instanceof Investigation) {
                     Investigation temIx = (Investigation) i.getItem();
-                    temTube = temIx.getInvestigationTube().getCode();
+                    if (temIx != null && temIx.getInvestigationTube() != null && temIx.getInvestigationTube().getName() != null) {
+                        temTube = temIx.getInvestigationTube().getName();
+                    }
                 }
             }
             tbis = tbis.substring(0, tbis.length() - 2);
             tbis += " - " + temTube;
+            System.out.println("ptLabel before = " + ptLabel);
             ptLabel = ptLabel.replace("[tests]", tbis);
+            System.out.println("ptLabel after = " + ptLabel);
             samplingRequestResponse += ptLabel;
         } else {
+            System.out.println("else");
             for (PatientSample ps : patientSamplesSet) {
+                System.out.println("ps = " + ps);
                 ptLabel = zplTemplate;
                 ptLabel = ptLabel.replace("[name]", ps.getPatient().getPerson().getName());
                 ptLabel = ptLabel.replace("[barcode]", "" + ps.getIdStr());
@@ -1217,17 +1238,36 @@ public class PatientInvestigationController implements Serializable {
                 tbis = "";
                 String temTube = "";
                 for (Item i : tpiics) {
-                    tbis += i.getName() + ", ";
+
+                    Long tid = i.getId();
+                    System.out.println("tid = " + tid);
+                    if (tid != null) {
+                        Item tix = getItemFacade().find(i.getId());
+                        System.out.println("tix = " + tix);
+                        if (tix != null) {
+                            System.out.println("tix = " + tix.getCode());
+                        }
+                    }
+
+                    System.out.println("i = " + i);
+                    System.out.println("i.getCode() = " + i.getCode());
+                    tbis += i.getSname() + ", ";
                     if (i instanceof Investigation) {
                         Investigation temIx = (Investigation) i;
-                        temTube = temIx.getInvestigationTube().getCode();
+                        if (temIx != null && temIx.getInvestigationTube() != null && temIx.getInvestigationTube().getName() != null) {
+                            temTube = temIx.getInvestigationTube().getName();
+                        }
                     }
                 }
+                System.out.println("tbis = " + tbis);
                 if (tbis.length() > 2) {
                     tbis = tbis.substring(0, tbis.length() - 2);
                     tbis += " - " + temTube;
+                    System.out.println("ptLabel before " + ptLabel);
                     ptLabel = ptLabel.replace("[tests]", tbis);
+                    System.out.println("ptLabel after " + ptLabel);
                     samplingRequestResponse += ptLabel;
+                    System.out.println("samplingRequestResponse = " + samplingRequestResponse);
                 }
             }
         }
