@@ -1266,6 +1266,7 @@ public class ChannelBillController implements Serializable {
         } else {
             amount = getbookingController().getSelectedServiceSession().getOriginatingSession().getTotalFfee();
         }
+        System.out.println("amount = " + amount);
         return amount;
     }
 
@@ -1595,6 +1596,7 @@ public class ChannelBillController implements Serializable {
     
     
     public void add() {
+        System.out.println("add");
         errorText = "";
         if (errorCheck()) {
             settleSucessFully = false;
@@ -1833,12 +1835,24 @@ public class ChannelBillController implements Serializable {
         bs.setServiceSession(getbookingController().getSelectedServiceSession());
 //        bs.setServiceSession(getbookingController().getSelectedServiceSession().getOriginatingSession());
         bs.setSessionDate(getbookingController().getSelectedServiceSession().getSessionDate());
-        bs.setSessionTime(getbookingController().getSelectedServiceSession().getSessionTime());
-        bs.setStaff(getbookingController().getSelectedServiceSession().getStaff());
+        
 
         int count = getServiceSessionBean().getSessionNumber(getbookingController().getSelectedServiceSession(), getbookingController().getSelectedServiceSession().getSessionDate(), bs);
         // //System.out.println("getbookingController().getSelectedServiceSession().getStartingNo() = " + getbookingController().getSelectedServiceSession().getStartingNo());
 
+        
+        Calendar ptTime = Calendar.getInstance();
+        Calendar sesTime = Calendar.getInstance();
+        Double minutsDbl = getbookingController().getSelectedServiceSession().getDuration() * count;
+        int minutesInt =minutsDbl.intValue();
+        sesTime.setTime(getbookingController().getSelectedServiceSession().getSessionTime());
+        ptTime.setTime(getbookingController().getSelectedServiceSession().getSessionDate());
+        ptTime.set(Calendar.HOUR, sesTime.get(Calendar.HOUR));
+        ptTime.set(Calendar.MINUTE, sesTime.get(Calendar.MINUTE));
+        ptTime.add(Calendar.MINUTE, minutesInt);
+        bs.setSessionTime(getbookingController().getSelectedServiceSession().getSessionTime());
+        bs.setStaff(getbookingController().getSelectedServiceSession().getStaff());
+        
         bs.setSerialNo(count);
 
         getBillSessionFacade().create(bs);
@@ -1847,6 +1861,7 @@ public class ChannelBillController implements Serializable {
     }
 
     private BillItem createBillItem(Bill bill) {
+        System.out.println("createBillItem");
         BillItem bi = new BillItem();
         bi.setAdjustedValue(0.0);
         bi.setAgentRefNo(agentRefNo);
@@ -1862,12 +1877,12 @@ public class ChannelBillController implements Serializable {
         bi.setQty(1.0);
         bi.setRate(getbookingController().getSelectedServiceSession().getOriginatingSession().getTotal());
         bi.setSessionDate(getbookingController().getSelectedServiceSession().getSessionAt());
-
         billItemFacade.create(bi);
         return bi;
     }
 
     private List<BillFee> createBillFee(Bill bill, BillItem billItem) {
+        System.out.println("createBillFee");
         List<BillFee> billFeeList = new ArrayList<>();
         double tmpTotal = 0;
         double tmpTotalNet = 0;
@@ -2022,9 +2037,9 @@ public class ChannelBillController implements Serializable {
         bill.setTotal(tmpTotal);
         bill.setVat(tmpTotalVat);
         bill.setVatPlusNetTotal(tmpTotalVatPlusNet);
-        // //System.out.println("tmpDiscount = " + tmpDiscount);
-        // //System.out.println("tmpTotal = " + tmpTotal);
-        // //System.out.println("bill.getNetTotal() = " + bill.getNetTotal());
+         System.out.println("tmpDiscount = " + tmpDiscount);
+         System.out.println("tmpTotal = " + tmpTotal);
+         System.out.println("bill.getNetTotal() = " + bill.getNetTotal());
         getBillFacade().edit(bill);
 
         billItem.setDiscount(tmpDiscount);
@@ -2076,6 +2091,7 @@ public class ChannelBillController implements Serializable {
     }
 
     private Bill createBill() {
+        System.out.println("createBill");
         Bill bill = new BilledBill();
         bill.setStaff(getbookingController().getSelectedServiceSession().getOriginatingSession().getStaff());
         bill.setToStaff(toStaff);
@@ -2174,6 +2190,8 @@ public class ChannelBillController implements Serializable {
             getBillFacade().edit(bill);
         }
 
+        System.out.println("bill.getTotal() = " + bill.getTotal());
+        
         return bill;
     }
 
@@ -2181,6 +2199,7 @@ public class ChannelBillController implements Serializable {
     BillBeanController billBeanController;
 
     private Bill saveBilledBill() {
+        System.out.println("saveBilledBill");
         Bill savingBill = createBill();
         BillItem savingBillItem = createBillItem(savingBill);
         BillSession savingBillSession = createBillSession(savingBill, savingBillItem);

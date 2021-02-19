@@ -17,7 +17,7 @@
     <cc:implementation>
 
         <h:panelGroup>
-            <h:outputStylesheet library="css" name="pharmacypos.css"></h:outputStylesheet>
+            <!--<h:outputStylesheet library="css" name="pharmacypos.css"></h:outputStylesheet>-->
 
             <h:panelGroup id="panelAddedBillPrint">
                 <div class="fiveinchbill" >
@@ -45,19 +45,18 @@
                             <!--<h:outputLabel value="Fax:-#{cc.attrs.bill.department.fax}" rendered="#{cc.attrs.bill.department.fax ne null}"></h:outputLabel>-->
                         </div>
                     </div>
-                    <p:spacer height="15"/>
+                    <p:spacer height="35"/>
 
-                    <div class="headingBill" style="text-align: center; font-weight: bold; font-size: 15px!important;">
-                        <h:outputLabel value="Invoice"  style="font-size: 15px!important" />    
-                        <h:outputLabel value="**Duplicate**"  rendered="#{cc.attrs.dup eq true}" /> 
-                        <h:outputLabel value="**Cancelled**"  rendered="#{cc.attrs.bill.cancelled eq true}" /> 
+                    <div class="headingBill" style="text-align: center; font-weight: bold; font-size: 18px!important;">
+                        <h:outputLabel value="INVOICE"  style="font-size: 18px!important" />    
+                        <h:outputLabel value=" **Duplicate**"  rendered="#{cc.attrs.dup eq true}" /> 
+                        <h:outputLabel value=" **Cancelled**"  rendered="#{cc.attrs.bill.cancelled eq true}" /> 
                     </div>
 
 
                     <div class="billline">
-                        <h:outputLabel value="--------------------------" style="font-size: 15px!important"></h:outputLabel>
                     </div>
-                    <p:spacer height="40"/>
+                    <p:spacer height="20"/>
 
 
                     <table >
@@ -72,11 +71,11 @@
                                     <tr>
                                         <td>
                                             <b>
-                                                <!--<h:outputLabel value="Number" style="font-size: 15px!important"></h:outputLabel>-->
+                                                <h:outputLabel value="Appointment Number" style="font-size: 15px!important"></h:outputLabel>
                                             </b>
                                         </td>
                                         <td>
-                                            <p:spacer width="100" ></p:spacer>
+                                            <p:spacer width="10" ></p:spacer>
                                         </td>
                                         <td>
                                             <h:outputLabel value=":" style="font-size: 15px!important;width: 30px!important;"></h:outputLabel>
@@ -94,14 +93,14 @@
                                      <tr>
                                         <td>
                                             <b>
-                                                <!--<h:outputLabel value="Consultant" style="font-size: 15px!important"></h:outputLabel>-->
+                                                <h:outputLabel value="Consultant" style="font-size: 15px!important"></h:outputLabel>
                                             </b>
                                         </td>
                                         <td>
                                             <p:spacer width="10" ></p:spacer>
                                         </td>
                                         <td>
-                                            <!--<h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>-->
+                                            <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
                                         <td>
                                             <b>
@@ -115,13 +114,13 @@
                                     
                                     <tr>
                                         <td>
-                                            <!--<h:outputLabel value="Name" style="font-size: 15px!important"></h:outputLabel>-->
+                                            <h:outputLabel value="Name" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
                                         <td>
                                             <p:spacer width="10" ></p:spacer>
                                         </td>
                                         <td>
-                                            <!--<h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>-->
+                                            <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
                                         <td>
                                             <h:outputLabel value="#{cc.attrs.bill.patient.person.nameWithTitle}" style="font-size: 15px!important"></h:outputLabel>
@@ -149,14 +148,14 @@
                                     <tr>
                                         <td>
                                             <b>
-                                                <!--<h:outputLabel value="App. Date" style="font-size: 15px!important"></h:outputLabel>-->
+                                                <h:outputLabel value="App. Date" style="font-size: 15px!important"></h:outputLabel>
                                             </b>
                                         </td>
                                         <td>
                                             <p:spacer width="10" ></p:spacer>
                                         </td>
                                         <td>
-                                            <!--<h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>-->
+                                            <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
                                         <td>
                                             <b>
@@ -170,16 +169,16 @@
 
                                     <tr>
                                         <td>
-                                            <!--<h:outputLabel value="Time" style="font-size: 15px!important"></h:outputLabel>-->
+                                            <h:outputLabel value="Time" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
                                         <td>
                                             <p:spacer width="10" ></p:spacer>
                                         </td>
                                         <td>
-                                            <!--<h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>-->
+                                            <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
                                         <td>
-                                            <h:outputLabel value="#{cc.attrs.bill.singleBillSession.serviceSession.startingTime}" style="font-size: 15px!important">
+                                            <h:outputLabel value="#{cc.attrs.bill.singleBillSession.sessionTime}" style="font-size: 15px!important">
                                                 <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
                                             </h:outputLabel>
                                         </td>
@@ -214,13 +213,13 @@
 
                                             <tr>
                                                 <td>
-                                                    <!--<h:outputLabel value="#{cbif.fee.name}" style="font-size: 15px!important"></h:outputLabel>-->
+                                                    <h:outputLabel value="#{cbif.fee.name}" style="font-size: 15px!important"></h:outputLabel>
                                                 </td>
                                                 <td>
                                                     <p:spacer width="10" ></p:spacer>
                                                 </td>
                                                 <td>
-                                                    <!--<h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>-->
+                                                    <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
                                                 </td>
                                                 <td>
                                                     <h:outputLabel value="#{cbif.feeValue}" style="font-size: 15px!important">
@@ -239,13 +238,13 @@
 
                                     <tr>
                                         <td>
-                                            <!--<h:outputLabel value="Total" style="font-size: 15px!important"></h:outputLabel>-->
+                                            <h:outputLabel value="Total" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
                                         <td>
                                             <p:spacer width="10" ></p:spacer>
                                         </td>
                                         <td>
-                                            <!--<h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>-->
+                                            <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
                                         <td>
                                             <h:outputLabel value="#{cc.attrs.bill.netTotal}" style="font-size: 18px!important">
@@ -255,7 +254,7 @@
 
                                     </tr>
 
-<!--                                    <tr>
+                                    <tr>
                                         <td>
                                             <h:outputLabel value="Session Name" style="font-size: 15px!important"></h:outputLabel>
                                         </td>
@@ -272,7 +271,7 @@
 
                                         </td>
 
-                                    </tr>-->
+                                    </tr>
 
                                     
 

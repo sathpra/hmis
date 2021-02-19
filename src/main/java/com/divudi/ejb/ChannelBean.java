@@ -814,7 +814,7 @@ public class ChannelBean {
                 + " and s.sessionDate between :fd and :td "
                 + " and type(s)=:class "
                 + " and s.institution=:ins "
-                + " and s.originatingSession=:ret "
+                + " and s.originatingSession.retired=:ret "
                 + " order by s.sessionDate,s.startingTime ";
         m.put("fd", fd);
         m.put("td", td);

@@ -862,20 +862,22 @@
 
 
 
-                            <h:commandButton value="Print" actionListener="#{channelBillController.updatePrintStatus}"
+                            <h:commandButton value="Print1" actionListener="#{channelBillController.updatePrintStatus}"
                                              disabled="#{channelBillController.billSession.billItem.bill.balance ne 0.0}"
                                              rendered="#{sessionController.loggedPreference.applicationInstitution eq 'Ruhuna' and channelBillController.billSession.billItem.bill.paymentMethod eq 'Agent'}">
                                 <f:ajax execute="@this" />
                                 <p:printer target="panelAddedBillPrintRe" />
                                 <!--<f:ajax event="click" execute="@this" listener="#{channelBillController.updatePrintStatus}" />-->
                             </h:commandButton>
-                            <p:commandButton value="Print" ajax="false" action="#" 
+                            <p:commandButton value="Print2" ajax="false" action="#" 
                                              disabled="#{channelBillController.billSession.billItem.bill.balance ne 0.0}"
                                              rendered="#{sessionController.loggedPreference.applicationInstitution ne 'Ruhuna' or (channelBillController.billSession.billItem.bill.paymentMethod ne 'Agent' and sessionController.loggedPreference.applicationInstitution eq 'Ruhuna')}">
                                 <p:printer target="panelAddedBillPrintRe" ></p:printer>
                             </p:commandButton>
 
                             <div style="width: 780px!important;height: 330px!important;overflow:scroll!important;" >
+                                
+                                
                                 <h:panelGroup id="panelAddedBillPrintRe" styleClass="noBorder" >
                                     <div>
                                         <h:panelGroup  >
