@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.divudi.entity.memberShip;
+package com.divudi.entity.membership;
 
 import com.divudi.data.PaymentMethod;
 import com.divudi.entity.PaymentScheme;

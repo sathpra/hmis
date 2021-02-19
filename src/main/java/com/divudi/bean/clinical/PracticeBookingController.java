@@ -763,7 +763,7 @@ public class PracticeBookingController implements Serializable {
 
     public void setSelectedBillSession(BillSession selectedBillSession) {
         this.selectedBillSession = selectedBillSession;
-        getChannelCancelController().makeNull();
+        getChannelCancelController().prepareForNewChannellingBillForMember();
         getChannelCancelController().setBillSession(selectedBillSession);
     }
 

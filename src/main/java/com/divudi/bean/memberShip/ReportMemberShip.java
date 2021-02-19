@@ -11,7 +11,7 @@ import com.divudi.data.memberShip.IpaPaymentMethod;
 import com.divudi.data.memberShip.OpdMemberShip;
 import com.divudi.entity.Institution;
 import com.divudi.entity.PriceMatrix;
-import com.divudi.entity.memberShip.MembershipScheme;
+import com.divudi.entity.membership.MembershipScheme;
 import com.divudi.facade.PriceMatrixFacade;
 import java.util.ArrayList;
 import java.util.List;

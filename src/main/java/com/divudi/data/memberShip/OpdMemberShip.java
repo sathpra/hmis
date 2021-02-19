@@ -6,7 +6,7 @@
 package com.divudi.data.memberShip;
 
 import com.divudi.entity.PriceMatrix;
-import com.divudi.entity.memberShip.MembershipScheme;
+import com.divudi.entity.membership.MembershipScheme;
 import java.util.ArrayList;
 import java.util.List;
 

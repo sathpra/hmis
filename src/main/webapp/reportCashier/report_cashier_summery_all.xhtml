@@ -29,23 +29,23 @@
 
                     </h:panelGrid>
 
-                    <h:panelGrid columns="5" >
+                    <h:panelGrid columns="7" >
 
 
 
                         <p:commandButton id="btnRefresh" ajax="false" 
-                                         value="Process" 
-                                         styleClass="noPrintButton" rendered="#{sessionController.loggedPreference.applicationInstitution ne 'Ruhuna'}"
+                                         value="All Bills" 
+                                         styleClass="noPrintButton" 
                                          style="float: right;" 
                                          actionListener="#{cashierReportController.calCashierData()}" />  
                         <p:commandButton id="btnRefresh1" ajax="false" 
-                                         value="Channel" 
-                                         styleClass="noPrintButton" rendered="#{sessionController.loggedPreference.applicationInstitution eq 'Ruhuna'}"
+                                         value="Channel Bills" 
+                                         styleClass="noPrintButton" 
                                          style="float: right;" 
                                          actionListener="#{cashierReportController.calCashierDataChannel()}" />  
                         <p:commandButton id="btnRefresh2" ajax="false" 
-                                         value="Cashier" 
-                                         styleClass="noPrintButton" rendered="#{sessionController.loggedPreference.applicationInstitution eq 'Ruhuna'}"
+                                         value="Cashier Bills" 
+                                         styleClass="noPrintButton" 
                                          style="float: right;" 
                                          actionListener="#{cashierReportController.calCashierDataCashier()}" />  
                         <p:defaultCommand target="btnRefresh"/>

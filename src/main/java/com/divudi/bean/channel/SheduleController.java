@@ -10,7 +10,9 @@ import com.divudi.data.ApplicationInstitution;
 import com.divudi.data.FeeChangeType;
 import com.divudi.data.FeeType;
 import com.divudi.data.PersonInstitutionType;
+import com.divudi.ejb.ChannelBean;
 import com.divudi.ejb.CommonFunctions;
+import com.divudi.ejb.FinalVariables;
 import com.divudi.ejb.StockHistoryRecorder;
 import com.divudi.entity.Department;
 import com.divudi.entity.FeeChange;
@@ -34,6 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -48,6 +51,9 @@ import javax.persistence.TemporalType;
 @SessionScoped
 public class SheduleController implements Serializable {
 
+    /**
+     * EJBs
+     */
     @EJB
     private StaffFacade staffFacade;
     @EJB
@@ -62,10 +68,20 @@ public class SheduleController implements Serializable {
     ServiceSessionFacade serviceSessionFacade;
     @EJB
     StockHistoryRecorder stockHistoryRecorder;
+    @EJB
+    ChannelBean channelBean;
+    @EJB
+    FinalVariables finalVariables;
+    /**
+     * Controllers
+     */
     @Inject
     private SessionController sessionController;
     @Inject
     CommonFunctions commonFunctions;
+    /**
+     * Class Variables
+     */
     private Speciality speciality;
     ServiceSession current;
     private Staff currentStaff;
@@ -110,6 +126,7 @@ public class SheduleController implements Serializable {
         stf.setFeeType(FeeType.Staff);
         stf.setFee(0.0);
         stf.setFfee(0.0);
+        stf.setDiscountAllowed(false);
         stf.setInstitution(getCurrent().getInstitution());
         stf.setSpeciality(speciality);
         stf.setStaff(currentStaff);
@@ -121,9 +138,11 @@ public class SheduleController implements Serializable {
         ItemFee hos = new ItemFee();
         hos.setName("Hospital Fee");
         hos.setFeeType(FeeType.OwnInstitution);
+        hos.setDiscountAllowed(true);
         hos.setFee(0.0);
         hos.setFfee(0.0);
         hos.setInstitution(getCurrent().getInstitution());
+        hos.setDepartment(current.getDepartment());
         hos.setServiceSession(current);
 
         return hos;
@@ -204,7 +223,7 @@ public class SheduleController implements Serializable {
             } else {
                 sql = "select p from Staff p where p.retired=false and (upper(p.person.name) like '%" + query.toUpperCase() + "%'or  upper(p.code) like '%" + query.toUpperCase() + "%' ) order by p.person.name";
             }
-            ////System.out.println(sql);
+            ////// //System.out.println(sql);
             suggestions = getStaffFacade().findBySQL(sql, m);
         }
         return suggestions;
@@ -219,7 +238,7 @@ public class SheduleController implements Serializable {
         } else {
             sql = "select p from Staff p where p.retired=false order by p.person.name";
         }
-        ////System.out.println(sql);
+        ////// //System.out.println(sql);
         suggestions = getStaffFacade().findBySQL(sql);
 
         return suggestions;
@@ -362,6 +381,8 @@ public class SheduleController implements Serializable {
 
     public void prepareAdd() {
         current = new ServiceSession();
+        current.setInstitution(getSessionController().getInstitution());
+        current.setDepartment(getSessionController().getDepartment());
         itemFees = new ArrayList<>();
         createFees();
     }
@@ -456,7 +477,7 @@ public class SheduleController implements Serializable {
         m.put("ss", ss);
         m.put("nd", new Date());
         List<ServiceSession> sss = getFacade().findBySQL(sql, m, TemporalType.DATE);
-        System.out.println("m = " + m);
+        // //System.out.println("m = " + m);
 //        double d=getFacade().findAggregateLong(sql, m, TemporalType.TIMESTAMP);
         return sss.size() > 0;
     }
@@ -531,8 +552,7 @@ public class SheduleController implements Serializable {
     }
 
     public void saveSelected() {
-        System.err.println("1 " + getItemFees().size());
-        //System.out.println("session name"+current.getName());
+        //// //System.out.println("session name"+current.getName());
         if (checkError()) {
             return;
         }
@@ -541,7 +561,6 @@ public class SheduleController implements Serializable {
             SessionNumberGenerator ss = saveSessionNumber();
             current.setSessionNumberGenerator(ss);
         }
-
 
         getCurrent().setStaff(currentStaff);
         if (getCurrent().getId() != null && getCurrent().getId() > 0) {
@@ -553,7 +572,7 @@ public class SheduleController implements Serializable {
             getCurrent().setCreatedAt(new Date());
             getCurrent().setCreater(getSessionController().getLoggedUser());
             getFacade().create(getCurrent());
-            stockHistoryRecorder.generateSessions(currentStaff);
+            generateSessions(currentStaff);
             UtilityController.addSuccessMessage("Saved Successfully");
         }
 
@@ -573,21 +592,211 @@ public class SheduleController implements Serializable {
             JsfUtil.addErrorMessage("Pease Select Doctor");
             return;
         }
-        stockHistoryRecorder.generateSessions(currentStaff);
+        generateSessions(currentStaff);
+    }
+
+    public void generateSessions(Staff staff) {
+        String sql;
+        Map m = new HashMap();
+        m.put("staff", staff);
+        m.put("class", ServiceSession.class);
+        if (staff != null) {
+            sql = "Select s.id From ServiceSession s "
+                    + " where s.retired=false "
+                    + " and s.staff=:staff "
+                    + " and s.originatingSession is null "
+                    + " and type(s)=:class "
+                    + " order by s.sessionWeekday,s.startingTime ";
+            // //System.out.println("Consultant = " + staff.getPerson().getName());
+            // //System.out.println("m = " + m);
+            List<Long> tmp = new ArrayList<>();
+            System.err.println("Time stage 2.1 = " + new Date());
+            tmp = serviceSessionFacade.findLongList(sql, m);
+            System.err.println("Time stage 2.2 = " + new Date());
+
+            System.err.println("Fetch Original Sessions = " + tmp.size());
+            System.err.println("Time stage 3.1 = " + new Date());
+//            calculateFeeBySessionIdList(tmp, channelBillController.getPaymentMethod());
+//            calculateFeeBySessionIdList(tmp, channelBillController.getPaymentMethod());
+//            calculateFeeBySessionIdList(tmp, channelBillController.getPaymentMethod());
+//            calculateFeeBySessionIdList(tmp, channelBillController.getPaymentMethod());
+//            calculateFeeBySessionIdList(tmp, channelBillController.getPaymentMethod());
+//            calculateFeeBySessionIdList(tmp, channelBillController.getPaymentMethod());
+//            calculateFeeBySessionIdList(tmp, channelBillController.getPaymentMethod());
+//            calculateFeeBySessionIdList(tmp, channelBillController.getPaymentMethod());
+            System.err.println("Time stage 3.2 = " + new Date());
+            if (tmp.isEmpty()) {
+                return;
+            }
+            System.err.println("Time stage 4.1 = " + new Date());
+            generateDailyServiceSessionsFromWeekdaySessionsNewByServiceSessionId(tmp, null);
+            System.err.println("Time stage 4.2 = " + new Date());
+//            generateSessionEvents(serviceSessions);
+//            generateSessionEvents(serviceSessions);
+
+        }
+    }
+
+    public void generateDailyServiceSessionsFromWeekdaySessionsNewByServiceSessionId(List<Long> inputSessions, Date d) {
+        int sessionDayCount = 0;
+        List<ServiceSession> createdSessions = new ArrayList<>();
+
+        if (inputSessions == null || inputSessions.isEmpty()) {
+            return;
+        }
+        Date nowDate;
+        if (d == null) {
+            nowDate = Calendar.getInstance().getTime();
+        } else {
+            nowDate = d;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(nowDate);
+        c.add(Calendar.MONTH, 2);
+        Date toDate = c.getTime();
+        Integer tmp = 0;
+        int rowIndex = 0;
+        List<ServiceSession> sessions = new ArrayList<>();
+        int finalSessionDayCount = finalVariables.getSessionSessionDayCounterLargestById(inputSessions);
+        while (toDate.after(nowDate) && sessionDayCount < finalSessionDayCount) {
+            if (sessions.isEmpty()) {
+                for (Long s : inputSessions) {
+                    ServiceSession ss = serviceSessionFacade.find(s);
+                    sessions.add(ss);
+                    if (ss.getSessionDate() != null) {
+                        Calendar sessionDate = Calendar.getInstance();
+                        sessionDate.setTime(ss.getSessionDate());
+                        Calendar nDate = Calendar.getInstance();
+                        nDate.setTime(nowDate);
+                        // //System.out.println("ss.getId() = " + ss.getId());
+                        if (sessionDate.get(Calendar.DATE) == nDate.get(Calendar.DATE) && sessionDate.get(Calendar.MONTH) == nDate.get(Calendar.MONTH) && sessionDate.get(Calendar.YEAR) == nDate.get(Calendar.YEAR)) {
+                            ServiceSession newSs = new ServiceSession();
+                            newSs = channelBean.fetchCreatedServiceSession(ss.getStaff(), nowDate, ss);
+                            if (newSs == null) {
+                                newSs = channelBean.createServiceSessionForChannelShedule(ss, nowDate);
+                            }
+                            //Temprory
+//                            newSs.setDisplayCount(channelBean.getBillSessionsCount(ss, nowDate));
+//                            newSs.setTransDisplayCountWithoutCancelRefund(channelBean.getBillSessionsCountWithOutCancelRefund(ss, nowDate));
+//                            newSs.setTransCreditBillCount(channelBean.getBillSessionsCountCrditBill(ss, nowDate));
+                            newSs.setStaff(ss.getStaff());
+//                            newSs.setTransRowNumber(rowIndex++);
+                            //add to list
+
+                            createdSessions.add(newSs);
+//                            checkDoctorArival(newSs);
+//                            ss.setServiceSessionCreateForOriginatingSession(true);
+                            if (Objects.equals(tmp, ss.getSessionWeekday())) {
+                                sessionDayCount++;
+                            }
+                        }
+                    } else {
+                        Calendar wdc = Calendar.getInstance();
+                        wdc.setTime(nowDate);
+                        if (ss.getSessionWeekday() != null && (ss.getSessionWeekday() == wdc.get(Calendar.DAY_OF_WEEK))) {
+                            ServiceSession newSs = new ServiceSession();
+                            newSs = channelBean.fetchCreatedServiceSession(ss.getStaff(), nowDate, ss);
+                            if (newSs == null) {
+                                newSs = new ServiceSession();
+//                            System.err.println("Cretate New");
+                                newSs = channelBean.createServiceSessionForChannelShedule(ss, nowDate);
+                            }
+//                        // //System.out.println("newSs = " + newSs);
+                            //Temprory
+//                            newSs.setDisplayCount(channelBean.getBillSessionsCount(newSs, nowDate));
+//                            newSs.setTransDisplayCountWithoutCancelRefund(channelBean.getBillSessionsCountWithOutCancelRefund(newSs, nowDate));
+//                            newSs.setTransCreditBillCount(channelBean.getBillSessionsCountCrditBill(newSs, nowDate));
+                            newSs.setTransRowNumber(rowIndex++);
+                            //add to list
+                            createdSessions.add(newSs);
+//                            checkDoctorArival(newSs);
+//                            ss.setServiceSessionCreateForOriginatingSession(true);
+                            if (!Objects.equals(tmp, ss.getSessionWeekday())) {
+                                sessionDayCount++;
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (ServiceSession ss : sessions) {
+
+                    if (ss.getSessionDate() != null) {
+                        Calendar sessionDate = Calendar.getInstance();
+                        sessionDate.setTime(ss.getSessionDate());
+                        Calendar nDate = Calendar.getInstance();
+                        nDate.setTime(nowDate);
+                        // //System.out.println("ss.getId() = " + ss.getId());
+                        if (sessionDate.get(Calendar.DATE) == nDate.get(Calendar.DATE) && sessionDate.get(Calendar.MONTH) == nDate.get(Calendar.MONTH) && sessionDate.get(Calendar.YEAR) == nDate.get(Calendar.YEAR)) {
+                            ServiceSession newSs = new ServiceSession();
+                            newSs = channelBean.fetchCreatedServiceSession(ss.getStaff(), nowDate, ss);
+                            if (newSs == null) {
+                                newSs = channelBean.createServiceSessionForChannelShedule(ss, nowDate);
+                            }
+                            //Temprory
+//                            newSs.setDisplayCount(channelBean.getBillSessionsCount(ss, nowDate));
+//                            newSs.setTransDisplayCountWithoutCancelRefund(channelBean.getBillSessionsCountWithOutCancelRefund(ss, nowDate));
+//                            newSs.setTransCreditBillCount(channelBean.getBillSessionsCountCrditBill(ss, nowDate));
+                            newSs.setStaff(ss.getStaff());
+//                            newSs.setTransRowNumber(rowIndex++);
+                            //add to list
+                            createdSessions.add(newSs);
+//                            checkDoctorArival(newSs);
+//                            ss.setServiceSessionCreateForOriginatingSession(true);
+                            if (Objects.equals(tmp, ss.getSessionWeekday())) {
+                                sessionDayCount++;
+                            }
+                        }
+                    } else {
+                        Calendar wdc = Calendar.getInstance();
+                        wdc.setTime(nowDate);
+                        if (ss.getSessionWeekday() != null && (ss.getSessionWeekday() == wdc.get(Calendar.DAY_OF_WEEK))) {
+                            ServiceSession newSs = new ServiceSession();
+                            newSs = channelBean.fetchCreatedServiceSession(ss.getStaff(), nowDate, ss);
+                            if (newSs == null) {
+                                newSs = new ServiceSession();
+//                            System.err.println("Cretate New");
+                                newSs = channelBean.createServiceSessionForChannelShedule(ss, nowDate);
+                            }
+//                        // //System.out.println("newSs = " + newSs);
+                            //Temprory
+//                            newSs.setDisplayCount(channelBean.getBillSessionsCount(newSs, nowDate));
+//                            newSs.setTransDisplayCountWithoutCancelRefund(channelBean.getBillSessionsCountWithOutCancelRefund(newSs, nowDate));
+//                            newSs.setTransCreditBillCount(channelBean.getBillSessionsCountCrditBill(newSs, nowDate));
+//                            newSs.setTransRowNumber(rowIndex++);
+                            //add to list
+                            createdSessions.add(newSs);
+////                            checkDoctorArival(newSs);
+//                            ss.setServiceSessionCreateForOriginatingSession(true);
+                            if (!Objects.equals(tmp, ss.getSessionWeekday())) {
+                                sessionDayCount++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Calendar nc = Calendar.getInstance();
+            nc.setTime(nowDate);
+            nc.add(Calendar.DATE, 1);
+            nowDate = nc.getTime();
+
+        }
+
     }
 
     public void updateCreatedServicesesions(ServiceSession ss) {
-        System.out.println("ss.getName() = " + ss.getName());
-        System.out.println("ss.getInstitution() = " + ss.getInstitution());
-        System.out.println("ss.getDepartment() = " + ss.getDepartment());
-        System.out.println("ss.getStartingTime() = " + ss.getStartingTime());
+        // //System.out.println("ss.getName() = " + ss.getName());
+        // //System.out.println("ss.getInstitution() = " + ss.getInstitution());
+        // //System.out.println("ss.getDepartment() = " + ss.getDepartment());
+        // //System.out.println("ss.getStartingTime() = " + ss.getStartingTime());
         for (ServiceSession i : fetchCreatedServiceSessions(ss)) {
-            System.out.println("i.getName() = " + i.getName());
-            System.out.println("i.getInstitution() = " + i.getInstitution());
-            System.out.println("i.getDepartment() = " + i.getDepartment());
-            System.out.println("i.getStartingTime() = " + i.getStartingTime());
-            System.out.println("i.getEndingTime() = " + i.getEndingTime());
-            System.out.println("i.getMaxNo() = " + i.getMaxNo());
+            // //System.out.println("i.getName() = " + i.getName());
+            // //System.out.println("i.getInstitution() = " + i.getInstitution());
+            // //System.out.println("i.getDepartment() = " + i.getDepartment());
+            // //System.out.println("i.getStartingTime() = " + i.getStartingTime());
+            // //System.out.println("i.getEndingTime() = " + i.getEndingTime());
+            // //System.out.println("i.getMaxNo() = " + i.getMaxNo());
 
             i.setName(ss.getName());
             i.setInstitution(ss.getInstitution());
@@ -663,7 +872,7 @@ public class SheduleController implements Serializable {
         createFeesForServiceSessionList(tmpList, "Doctor Fee", FeeType.Staff);
 
 //        List<ServiceSession> serviceSessions = serviceSessionFacade.findBySQL(sql, m);
-//        System.out.println("serviceSessions.size() = " + serviceSessions.size());
+//        // //System.out.println("serviceSessions.size() = " + serviceSessions.size());
 //        serviceSessionsAll.removeAll(serviceSessions);
 //        for (ServiceSession ss : serviceSessionsAll) {
 //            ItemFee onc = new ItemFee();
@@ -691,9 +900,8 @@ public class SheduleController implements Serializable {
                 + " order by f.id";
         m.put("fType", feeType);
         list = serviceSessionFacade.findBySQL(sql, m);
-        System.err.println("********");
-        System.out.println("m = " + m);
-        System.out.println("sql = " + sql);
+        // //System.out.println("m = " + m);
+        // //System.out.println("sql = " + sql);
         return list;
 
     }
@@ -712,13 +920,11 @@ public class SheduleController implements Serializable {
                     itemFee.setSpeciality(ss.getStaff().getSpeciality());
                     itemFee.setStaff(ss.getStaff());
                 } else {
-                    System.err.println("**** No Specility****");
-                    System.out.println("ss.getName() = " + ss.getName());
+                    // //System.out.println("ss.getName() = " + ss.getName());
                     return;
                 }
             } catch (Exception e) {
-                System.err.println("**** No Specility****");
-                System.out.println("ss.getName() = " + ss.getName());
+                // //System.out.println("ss.getName() = " + ss.getName());
                 return;
             }
         }
@@ -727,8 +933,7 @@ public class SheduleController implements Serializable {
 
     public void createFeesForServiceSessionList(List<ServiceSession> serviceSessions, String name, FeeType ft) {
         for (ServiceSession ss : serviceSessions) {
-            System.err.println("*********");
-            System.out.println("s.getName() = " + ss.getName());
+            // //System.out.println("s.getName() = " + ss.getName());
             createFee(ss, name, ft);
         }
     }
@@ -765,7 +970,7 @@ public class SheduleController implements Serializable {
 
     public void saveFeeChanges() {
         Date nowDate = getCommonFunctions().getEndOfDay(new Date());
-        System.out.println("nowDate = " + nowDate);
+        // //System.out.println("nowDate = " + nowDate);
         if (nowDate.before(effectiveDate)) {
             JsfUtil.addErrorMessage("Please Select Future Date");
             return;
@@ -811,14 +1016,14 @@ public class SheduleController implements Serializable {
                             && (fc.getValidFrom().getTime() == c.getValidFrom().getTime())) {
                         JsfUtil.addErrorMessage("This Fee Already Add - " + c.getFee().getName() + " , " + c.getFee().getFeeType() + " , " + c.getValidFrom());
                     } else {
-                        System.out.println("fc.getFee().getName() = " + fc.getFee().getName());
-                        System.out.println("c.getFee().getName() = " + c.getFee().getName());
-                        System.out.println("fc.getFee().getFeeType() = " + fc.getFee().getFeeType());
-                        System.out.println("c.getFee().getFeeType() = " + c.getFee().getFeeType());
-                        System.out.println("fc.getValidFrom() = " + fc.getValidFrom());
-                        System.out.println("c.getValidFrom() = " + c.getValidFrom());
-                        System.out.println("fc.getFee().getFee() = " + fc.getFee().getFee());
-                        System.out.println("c.getFee().getFee() = " + c.getFee().getFee());
+                        // //System.out.println("fc.getFee().getName() = " + fc.getFee().getName());
+                        // //System.out.println("c.getFee().getName() = " + c.getFee().getName());
+                        // //System.out.println("fc.getFee().getFeeType() = " + fc.getFee().getFeeType());
+                        // //System.out.println("c.getFee().getFeeType() = " + c.getFee().getFeeType());
+                        // //System.out.println("fc.getValidFrom() = " + fc.getValidFrom());
+                        // //System.out.println("c.getValidFrom() = " + c.getValidFrom());
+                        // //System.out.println("fc.getFee().getFee() = " + fc.getFee().getFee());
+                        // //System.out.println("c.getFee().getFee() = " + c.getFee().getFee());
                         if ((fc.getFee().getFee() != 0 || fc.getFee().getFfee() != 0) && (fc.getFee().getFee() != c.getFee().getFee() || fc.getFee().getFfee() != fc.getFee().getFfee())) {
                             fc.setValidFrom(effectiveDate);
                             fc.setCreatedAt(new Date());

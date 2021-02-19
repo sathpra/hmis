@@ -15,7 +15,7 @@ import com.divudi.entity.Institution;
 import com.divudi.entity.PriceMatrix;
 import com.divudi.entity.inward.AdmissionType;
 import com.divudi.entity.inward.RoomCategory;
-import com.divudi.entity.memberShip.MembershipScheme;
+import com.divudi.entity.membership.MembershipScheme;
 import com.divudi.facade.PriceMatrixFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
