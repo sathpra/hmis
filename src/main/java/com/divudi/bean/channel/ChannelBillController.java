@@ -1843,7 +1843,7 @@ public class ChannelBillController implements Serializable {
         
         Calendar ptTime = Calendar.getInstance();
         Calendar sesTime = Calendar.getInstance();
-        Double minutsDbl = getbookingController().getSelectedServiceSession().getDuration() * count;
+        Double minutsDbl = getbookingController().getSelectedServiceSession().getDuration() * (count-1);
         int minutesInt =minutsDbl.intValue();
         sesTime.setTime(getbookingController().getSelectedServiceSession().getSessionTime());
         ptTime.setTime(getbookingController().getSelectedServiceSession().getSessionDate());
