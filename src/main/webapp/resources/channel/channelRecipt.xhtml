@@ -18,16 +18,16 @@
 
 
 
-        <div style="width: 100%; margin: auto; text-align: center; border: 1px solid red; display: block;">
+        <div style="width: 100%; margin: auto; text-align: center; border: 1px solid red; display: block; font-size: 15px!important">
 
 
 
             <div style="text-align: left;  border: 1px solid green;  display: block;">
 
-                <p:spacer height="45"/>
+                <p:spacer height="75"/>
 
                 <div  style="text-align: center; font-weight: bold; font-size: 18px!important;">
-                    <h:outputLabel value="INVOICE"  style="font-size: 18px!important" /> 
+                    <h:outputLabel value="CHANNEL RECEIPT"  style="font-size: 18px!important" /> 
                     <h:panelGroup  rendered="#{cc.attrs.dup eq true}" >
                         <br/>
                         <h:outputLabel value=" **Duplicate**" escape="false" /> 
@@ -39,239 +39,225 @@
                     </h:panelGroup>
                 </div>
 
+                <p:spacer height="25"/>
 
 
-                <p:spacer height="80"/>
+                <div  style="text-align: center; font-weight: bold; font-size: 18px!important;">
+
+                    <table  >
 
 
+                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                            <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
 
 
-                <table  >
-
-
-                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                        <td style="padding-top: 2%; padding-bottom: 2%;">
-
-
-                            <table style="border-collapse: separate;" >
-
-
-
-                                <tr >
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <b>
-                                            <h:outputLabel value="Consultant" styleClass="red" style="font-size: 15px!important"></h:outputLabel>
-                                        </b>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <b>
-                                            <ui:repeat value="#{cc.attrs.bill.billItems}" var="cbi" >
-                                                <h:outputLabel value="#{cbi.billSession.staff.person.nameWithTitle}" style="font-size: 18px!important;height: 10px;"></h:outputLabel>
-                                            </ui:repeat>
-                                        </b>
-                                    </td>
-
-                                </tr>
-
-                                <tr >
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="Session" style="font-weight: bold; font-size: 16px!important;"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=":" style="font-weight: bold; font-size: 16px!important;"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="#{cc.attrs.bill.singleBillItem.item.name}" style="font-weight: bold; font-size: 16px!important;"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-
-                                    </td>
-
-                                </tr>
-
-
-                                <tr>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <b>
-                                            <h:outputLabel value="Number" style="font-size: 16px!important"></h:outputLabel>
-                                        </b>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=":" style="font-size: 16px!important;width: 30px!important;"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <b>
-                                            <ui:repeat value="#{cc.attrs.bill.billItems}" var="cbi" >
-                                                <h:outputLabel value="#{cbi.billSession.serialNo}" style="font-size: 16px!important;font-weight: bold;"></h:outputLabel>
-                                            </ui:repeat>
-                                        </b>
-                                    </td>
-
-                                </tr>
-
-                                <tr>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <b>
-                                            <h:outputLabel value="Date" style="font-size: 15px!important"></h:outputLabel>
-                                        </b>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <b>
-                                            <h:outputLabel value="#{cc.attrs.bill.singleBillSession.sessionDate}" style="font-size: 15px!important">
-                                                <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
-                                            </h:outputLabel>
-                                        </b>
-                                    </td>
-
-                                </tr>
+                                <table style="border-collapse: separate;" >
 
 
 
-                                <tr>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="Time" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="#{cc.attrs.bill.singleBillSession.sessionTime}" style="font-size: 15px!important">
-                                            <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
-                                        </h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                    </td>
+                                    <tr >
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <b>
+                                                <h:outputLabel value="Consultant"  ></h:outputLabel>
+                                            </b>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <p:spacer width="2" ></p:spacer>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value=":" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <b>
+                                                <ui:repeat value="#{cc.attrs.bill.billItems}" var="cbi" >
+                                                    <h:outputLabel value="#{cbi.billSession.staff.person.nameWithTitle}" ></h:outputLabel>
+                                                </ui:repeat>
+                                            </b>
+                                        </td>
 
-                                </tr>
+                                    </tr>
 
-                                <tr>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="Name" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="#{cc.attrs.bill.patient.person.nameWithTitle}" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
+                                    <tr >
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="Session" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <p:spacer width="2" ></p:spacer>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value=":" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="#{cc.attrs.bill.singleBillItem.item.name}" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
 
-                                </tr>
+                                        </td>
+
+                                    </tr>
 
 
+                                    <tr>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <b>
+                                                <h:outputLabel value="Number" ></h:outputLabel>
+                                            </b>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <p:spacer width="2" ></p:spacer>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value=":" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <b>
+                                                <ui:repeat value="#{cc.attrs.bill.billItems}" var="cbi" >
+                                                    <h:outputLabel value="#{cbi.billSession.serialNo}" ></h:outputLabel>
+                                                </ui:repeat>
+                                            </b>
+                                        </td>
 
+                                    </tr>
 
-                                <ui:repeat value="#{cc.attrs.bill.billFees}" var="cbif" >
-
-                                    <h:panelGroup rendered="#{cbif.feeValue ne 0.0}" >
-
-                                        <tr>
-                                            <td style="padding-top: 2%; padding-bottom: 2%;">
-                                                <h:outputLabel value="#{cbif.fee.name}" style="font-size: 15px!important"></h:outputLabel>
-                                            </td>
-                                            <td style="padding-top: 2%; padding-bottom: 2%;">
-                                                <p:spacer width="2" ></p:spacer>
-                                            </td>
-                                            <td style="padding-top: 2%; padding-bottom: 2%;">
-                                                <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
-                                            </td>
-                                            <td style="padding-top: 2%; padding-bottom: 2%;">
-                                                <h:outputLabel value="#{cbif.feeValue}" style="font-size: 15px!important">
-                                                    <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
+                                    <tr>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <b>
+                                                <h:outputLabel value="Date" ></h:outputLabel>
+                                            </b>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <p:spacer width="2" ></p:spacer>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value=":" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <b>
+                                                <h:outputLabel value="#{cc.attrs.bill.singleBillSession.sessionDate}" >
+                                                    <f:convertDateTime pattern="dd MMMM yyyy" ></f:convertDateTime>
                                                 </h:outputLabel>
-                                            </td>
+                                            </b>
+                                        </td>
 
-                                        </tr>
-
-                                    </h:panelGroup>
-
-
-                                </ui:repeat>
+                                    </tr>
 
 
 
-                                <tr>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="Total" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=":" style="font-size: 15px!important"></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="#{cc.attrs.bill.netTotal}" style="font-size: 18px!important">
-                                            <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
-                                        </h:outputLabel>
-                                    </td>
+                                    <tr>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="Time" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <p:spacer width="2" ></p:spacer>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value=":" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="#{cc.attrs.bill.singleBillSession.sessionTime}" >
+                                                <f:convertDateTime pattern="hh:mm a"></f:convertDateTime>
+                                            </h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                        </td>
 
-                                </tr>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="Name" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <p:spacer width="2" ></p:spacer>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value=":" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="#{cc.attrs.bill.patient.person.nameWithTitle}" ></h:outputLabel>
+                                        </td>
+
+                                    </tr>
 
 
 
 
+                                    <ui:repeat value="#{cc.attrs.bill.billFees}" var="cbif" >
 
-                                <tr></tr>
-                                <tr></tr>    
+                                        <h:panelGroup rendered="#{cbif.feeValue ne 0.0}" >
 
-                                <tr> </tr>
-                                <tr> </tr>
-                                <tr> </tr>
-                                <tr>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="Issued By" ></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=":" ></h:outputLabel>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value="#{cc.attrs.bill.paidBill.creater.webUserPerson.name}"></h:outputLabel>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <p:spacer width="2" ></p:spacer>
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                    </td>
-                                    <td style="padding-top: 2%; padding-bottom: 2%;">
-                                        <h:outputLabel value=""></h:outputLabel>
-                                    </td>
-                                </tr>
+                                            <tr>
+                                                <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                                    <h:outputLabel value="#{cbif.fee.name}" ></h:outputLabel>
+                                                </td>
+                                                <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                                    <p:spacer width="2" ></p:spacer>
+                                                </td>
+                                                <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                                    <h:outputLabel value=":" ></h:outputLabel>
+                                                </td>
+                                                <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                                    <h:outputLabel value="#{cbif.feeValue}" >
+                                                        <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
+                                                    </h:outputLabel>
+                                                </td>
 
-                            </table>
+                                            </tr>
+
+                                        </h:panelGroup>
+
+
+                                    </ui:repeat>
+
+
+
+                                    <tr>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="Total" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <p:spacer width="2" ></p:spacer>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value=":" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="#{cc.attrs.bill.netTotal}" >
+                                                <f:convertNumber pattern="#,##0.00" ></f:convertNumber>
+                                            </h:outputLabel>
+                                        </td>
+
+                                    </tr>
+
+
+
+                                    <tr></tr>
+                                    <tr></tr> 
+
+
+                                    <tr></tr>
+                                    <tr></tr>    
+
+                                    <tr>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="Issued By" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <p:spacer width="2" ></p:spacer>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value=":" ></h:outputLabel>
+                                        </td>
+                                        <td style="padding-top: 1.5%; padding-bottom: 1.5%;">
+                                            <h:outputLabel value="#{cc.attrs.bill.paidBill.creater.webUserPerson.name}"></h:outputLabel>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </td>
-                    </td>
-                </table>
+                    </table>
+
+                </div>
             </div>
 
         </div>
