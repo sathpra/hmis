@@ -1850,7 +1850,7 @@ public class ChannelBillController implements Serializable {
         ptTime.set(Calendar.HOUR, sesTime.get(Calendar.HOUR));
         ptTime.set(Calendar.MINUTE, sesTime.get(Calendar.MINUTE));
         ptTime.add(Calendar.MINUTE, minutesInt);
-        bs.setSessionTime(getbookingController().getSelectedServiceSession().getSessionTime());
+        bs.setSessionTime(ptTime.getTime());
         bs.setStaff(getbookingController().getSelectedServiceSession().getStaff());
         
         bs.setSerialNo(count);

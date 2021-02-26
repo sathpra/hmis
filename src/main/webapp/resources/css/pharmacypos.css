@@ -14,6 +14,7 @@
 
     }
 
+    
     .fiveinchbill{
         position: relative!important;
         padding: 5px!important;
@@ -226,7 +227,13 @@
 
 }
 
+bill.table { 
+    border-spacing: 10px;     border-collapse: separate;
+}
 
+bill.td { 
+    padding: 10px;
+}
 
 .institutionContact{
     position: relative!important;
