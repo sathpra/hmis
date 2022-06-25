@@ -1,14 +1,7 @@
 SET FOREIGN_KEY_CHECKS=0;
--- Delete from item where `RETIRED`=true;
--- drop table category where `RETIRED` = true;
-drop table person ;
-drop table webuser ;
--- drop table category where  id not in (Select `CATEGORY_ID` from item) and `DTYPE` 
--- in ('PharmaceuticalItemType','PharmaceuticalItemCategory','ServiceCategory','ServiceSubCategory','ConsumableCategory','StoreItemCategory','AssetCategory');
 Drop table billfee ;
 Drop table bill ;
 drop table billitem ;
-drop table bill ;
 drop table batchbill;
 drop table billcomponent ;
 drop table billnumber ;

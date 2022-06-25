@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:form>
+
+            <p:dataTable value="#{webUserController.items}" var="i" >
+                <p:column headerText="User">
+                    <p:outputLabel value="#{i.name}" ></p:outputLabel>
+                </p:column>
+                <p:column headerText="Retired">
+                    <p:outputLabel value="#{i.retired}" ></p:outputLabel>
+                </p:column>
+                <p:column >
+                    <p:commandButton ajax="false" action="#" value="Change Password" >
+                        <f:setPropertyActionListener value="#{i}" target="#{webUserController.current}" ></f:setPropertyActionListener>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+
+
+            <p:panel header="Change Password" >
+                <f:facet name="header" >
+                    <p:outputLabel value="Change Password" ></p:outputLabel>
+                    <p:commandButton ajax="false" value="Back" style="float: right;" action="#{webUserController.backToViewUsers()}" ></p:commandButton>
+                </f:facet>
+                <p:growl />
+                <p:panelGrid columns="2" >
+                    <p:outputLabel  value="Name" ></p:outputLabel>
+                    <p:outputLabel  value="#{webUserController.current.webUserPerson.name}" ></p:outputLabel>
+                    <p:outputLabel  value="User Name" ></p:outputLabel>
+                    <p:outputLabel  value="#{webUserController.current.name}" ></p:outputLabel>
+                    <h:outputLabel value="New Password"/>
+                    <h:inputSecret  value="#{webUserController.newPassword}"/>
+                    <h:outputLabel value="Re-enter new Password"/>
+                    <h:inputSecret   value="#{webUserController.newPasswordConfirm}"/>
+                    <p:defaultCommand target="btnChangePassword"/>
+                    <p:commandButton id="btnChangePassword" ajax="false" value="Change Password" 
+                                     action="#{webUserController.changeCurrentUserPassword}" 
+                                     onclick="onSubmitButton();"/>
+                </p:panelGrid>
+
+
+                <p:panel header="Allow user to log on to Departments" >
+
+                    <f:facet name="header" >
+                        <h:outputLabel value="Departments User Can Log"/>
+                        <p:commandButton ajax="false" value="Back" action="#{webUserController.backToViewUsers()}" style="float: right;" >
+                        </p:commandButton>
+                    </f:facet>
+                    <h:panelGrid  columns="2" >                          
+                        <h:outputLabel value="User"/>
+                        <p:autoComplete id="user" forceSelection="true" converter="webUs"  
+                                        completeMethod="#{webUserController.completeUser}" var="us" 
+                                        itemLabel="#{us.webUserPerson.name}" itemValue="#{us}" 
+                                        value="#{userDepartmentController.selectedUser}" >
+                            <f:ajax event="itemSelect" execute="user" render="ins" />
+                        </p:autoComplete>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="2" styleClass="alignTop" >
+                        <h:panelGrid columns="2" >
+                            <h:outputText value="Institution" ></h:outputText>
+                            <p:selectOneMenu  value="#{userDepartmentController.currentInstituion}" id="ins2"  >
+                                <f:selectItem itemLabel="Please select an institutie"/>
+                                <f:selectItems value="#{institutionController.items}" var="i" itemLabel="#{i.name}" itemValue="#{i}" />
+                                <p:ajax update="dept2" process="ins2" event="change"/>
+                            </p:selectOneMenu>
+                            <h:outputText value="Department" ></h:outputText>
+                            <p:selectOneMenu id="dept2"  value="#{userDepartmentController.currentDepartment}">
+                                <f:selectItem itemLabel="Please select a Department"/>
+                                <f:selectItems value="#{userDepartmentController.currentInsDepartments}" var="d" itemLabel="#{d.name}" itemValue="#{d}" />
+                            </p:selectOneMenu>
+                            <p:commandButton id="btnAddDepartments" ajax="false" value="Add" action="#{userDepartmentController.addDepartmentForUser()}"/>
+                            <p:defaultCommand target="btnAddDepartments"/>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="2" id="ins">
+                            <p:panel header="Departments allowed for this user">
+                                <p:dataTable  value="#{userDepartmentController.items}" var="i">
+                                    <p:column headerText="Institution">
+                                        <h:outputLabel value="#{i.department.institution.name}"/>                              
+                                    </p:column>
+                                    <p:column headerText="Department">
+                                        <h:outputLabel value="#{i.department.name}"/>                              
+                                    </p:column>
+                                    <p:column >
+                                        <p:commandButton ajax="false" value="Remove"  onclick="onSubmitButton();">
+                                            <f:setPropertyActionListener value="#{i}" target="#{userDepartmentController.current}"/>
+                                           <f:setPropertyActionListener value="#{i}" target="#{userPrivilageController.currentWebUser}"/>
+                                      
+                                        
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>                        
+                            </p:panel>
+
+                        </h:panelGrid>
+
+                    </h:panelGrid>
+
+
+
+
+
+
+                    <h1>UsePrivcon#{userPrivilageController.currentWebUser}</h1>
+
+                </p:panel>
+
+
+                <p:panelGrid columns="2"   >                   
+
+                    <p:panel header="Manage User Privilages"   >
+
+
+                        <f:facet name="header" >
+                            <h:outputLabel value="Manage User Privilages"/>
+                            <p:commandButton value="Update User Privilage"  action="#{userPrivilageController.savePrivileges()}" ajax="false" onclick="onSubmitButton();" >  
+                            </p:commandButton>
+
+
+                            <p:commandButton ajax="false" value="Back" action="#{webUserController.backToViewUsers()}" >
+                            </p:commandButton>
+
+                        </f:facet>
+
+                        <h:panelGrid  columns="2" >                          
+
+                            <p:autoComplete id="user" converter="webUs" forceSelection="true"  completeMethod="#{webUserController.completeUser}" var="us" 
+                                            itemLabel="#{us.webUserPerson.name}" itemValue="#{us}"  
+                                            value="#{userPrivilageController.currentWebUser}" >
+                                <f:ajax event="itemSelect" execute="user" render="tree" />
+                            </p:autoComplete>
+                        </h:panelGrid>
+
+
+                        <p:panel id="tree">
+                            <p:growl id="messages" showDetail="true" escape="false"/>  
+                            <p:tree value="#{userPrivilageController.tmp}" var="node"  
+                                    selectionMode="checkbox" 
+                                    selection="#{userPrivilageController.selectedNodes}">  
+                                <p:treeNode>  
+                                    <h:outputText value="#{node}" />  
+                                </p:treeNode>  
+                            </p:tree>  
+
+
+                        </p:panel>
+                    </p:panel>
+                </p:panelGrid>
+
+            </p:panel>
+        </h:form>
+
+    </cc:implementation>
+</html>
