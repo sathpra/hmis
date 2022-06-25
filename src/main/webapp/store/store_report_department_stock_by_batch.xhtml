@@ -18,8 +18,11 @@
                     <p:panel header="1) Stock Reports" >
 
                         <h:panelGrid columns="2" >
-                            <h:outputLabel value="Department" ></h:outputLabel>
-                            <p:autoComplete completeMethod="#{departmentController.completeDept}" var="dept" itemLabel="#{dept.name}" itemValue="#{dept}" forceSelection="true" value="#{storeReportsStock.department}" converter="departmentConverter" >
+                            <h:outputLabel value="Department (#{storeReportsStock.department.id})" ></h:outputLabel>
+                            <p:autoComplete completeMethod="#{departmentController.completeDept}" 
+                                            var="dept" itemLabel="#{dept.name}"
+                                            itemValue="#{dept}" forceSelection="true" 
+                                            value="#{storeReportsStock.department}" converter="departmentConverter" >
                             </p:autoComplete>
                             <h:outputLabel value="Item" ></h:outputLabel>
                             <p:autoComplete  id="lstitem"   size="10" value="#{storeReportsStock.item}" 
@@ -45,7 +48,8 @@
 
                         </h:panelGrid>
                         <p:panel>
-                            <p:commandButton ajax="false" value="Process" action="#{storeReportsStock.fillDepartmentStocks()}" ></p:commandButton>
+                            <p:commandButton ajax="false" value="Process" 
+                                             action="#{storeReportsStock.fillDepartmentStocks()}" ></p:commandButton>
                             <p:commandButton value="Print" ajax="false" >
                                 <p:printer target="gpBillPreview" ></p:printer>
                             </p:commandButton>

@@ -88,12 +88,12 @@
 
                             <p:column headerText="Shift Start">
                                 <h:outputLabel value="#{sts.shiftStartTime}" >
-                                    <f:convertDateTime pattern="dd MMM yyyy hh:mm a" ></f:convertDateTime>
+                                    <f:convertDateTime  timeZone="Asia/Colombo" pattern="dd MMM yyyy hh:mm a" ></f:convertDateTime>
                                 </h:outputLabel>
                             </p:column>
                             <p:column headerText="Shift End Time">
                                 <h:outputLabel value="#{sts.shiftEndTime}" >
-                                    <f:convertDateTime pattern="dd MMM yyyy hh:mm a" ></f:convertDateTime>
+                                    <f:convertDateTime  timeZone="Asia/Colombo" pattern="dd MMM yyyy hh:mm a" ></f:convertDateTime>
                                 </h:outputLabel>
 
                             </p:column>
