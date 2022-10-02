@@ -143,11 +143,11 @@ public class SmsController implements Serializable {
 
     public boolean sendSms(String number, String message, String username, String password, String sendingAlias) {
 
-        // //System.out.println("number = " + number);
-        // //System.out.println("message = " + message);
-        // //System.out.println("username = " + username);
-        // //System.out.println("password = " + password);
-        // //System.out.println("sendingAlias = " + sendingAlias);
+        // //// System.out.println("number = " + number);
+        // //// System.out.println("message = " + message);
+        // //// System.out.println("username = " + username);
+        // //// System.out.println("password = " + password);
+        // //// System.out.println("sendingAlias = " + sendingAlias);
 
         Map m = new HashMap();
         m.put("userName", username);
@@ -194,8 +194,8 @@ public class SmsController implements Serializable {
             request.append(pw);
 
             try {
-                // //System.out.println("pw = " + pw);
-                // //System.out.println("sendingNo = " + sendingNo);
+                // //// System.out.println("pw = " + pw);
+                // //// System.out.println("sendingNo = " + sendingNo);
 
                 stringResponse = Unirest.post(request.toString()).field("message", messageBody2).asString();
 
@@ -218,7 +218,7 @@ public class SmsController implements Serializable {
 
     public void createSmsTable() {
         long lng = getCommonFunctions().getDayCount(getReportKeyWord().getFromDate(), getReportKeyWord().getToDate());
-        // //System.out.println("lng = " + lng);
+        // //// System.out.println("lng = " + lng);
 
         if (Math.abs(lng) > 2 && !getReportKeyWord().isAdditionalDetails()) {
             UtilityController.addErrorMessage("Date Range is too Long");
@@ -251,7 +251,7 @@ public class SmsController implements Serializable {
         m.put("fd", getReportKeyWord().getFromDate());
         m.put("td", getReportKeyWord().getToDate());
 
-        // //System.out.println("m = " + m);
+        // //// System.out.println("m = " + m);
 
         if (getReportKeyWord().isAdditionalDetails()) {
             List<Object[]> objects = getSmsFacade().findAggregates(sql, m, TemporalType.TIMESTAMP);

@@ -337,8 +337,9 @@
                                         </h:panelGroup>
 
                                         <p:commandButton ajax="false" accesskey="s" value="Settle" 
-                                                         onclick="onSubmitButton();"
-                                                         action="#{pharmacySaleController.settleBillWithPay}" >
+                                                         onclick="if (! confirm('Are you sure?')) return false"
+                                                         action="#{pharmacySaleController.settleBillWithPay}" 
+                                                          >
                                             <f:facet name="title" >
                                                 <h:outputLabel value="S" style="text-decoration: underline;" ></h:outputLabel>
                                                 <h:outputLabel value="ettle"  ></h:outputLabel>
