@@ -566,7 +566,7 @@ public class LabReportSearchByDepartmentController implements Serializable {
     }
 
     public List<Bill> getLabBillsOwn() {
-        System.out.println("inside = ");
+        // System.out.println("inside = ");
         labBills = new ArrayList<>();
 
         BillType billType[] = {BillType.OpdBill, BillType.ChannelCash, BillType.ChannelPaid};
@@ -584,7 +584,7 @@ public class LabReportSearchByDepartmentController implements Serializable {
         tm.put("billType", billTypes);
         // tm.put("ins", getSessionController().getInstitution());
         tm.put("dep", getDepartment());
-        System.out.println("tm = " + tm);
+        // System.out.println("tm = " + tm);
         labBills = getBillFacade().findBySQL(sql, tm, TemporalType.TIMESTAMP);
 
         return labBills;
