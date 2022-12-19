@@ -705,7 +705,7 @@ public class CashierReportController implements Serializable {
         finalCashTot = finalChequeTot = finalCardTot = finalCreditTot = finalSlipTot = 0;
         webUserBillsTotals = new ArrayList<>();
         for (WebUser webUser : getCashiers()) {
-            System.out.println("com.divudi.bean.report.CashierReportController.calculateCashierSummeryTotals()");
+            // System.out.println("com.divudi.bean.report.CashierReportController.calculateCashierSummeryTotals()");
             WebUserBillsTotal tmp = new WebUserBillsTotal();
             tmp.setWebUser(webUser);
             List<BillsTotals> billls = new ArrayList<>();
