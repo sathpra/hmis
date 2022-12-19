@@ -1666,28 +1666,28 @@ public class BillBeanController implements Serializable {
     }
 
     public List<Object[]> fetchChannelBills(Date fromDate, Date toDate, Institution institution) {
-        BillType[] billTypes = {BillType.ChannelAgent, BillType.ChannelCash, BillType.ChannelPaid, BillType.ChannelStaff};
-        List<BillType> bts = Arrays.asList(billTypes);
-
-        String sql = "Select b.toDepartment,"
-                + " sum(b.netTotal) "
-                + " from Bill b "
-                + " where b.retired=false"
-                //                + " and b.cancelled=false "
-                //                + " and b.refunded=false "
-                + " and  b.billType in :bType"
-                + " and b.department.institution=:ins "
-                + " and b.createdAt between :fromDate and :toDate "
-                + " group by b.department"
-                + " order by b.department.name";
-
-        HashMap hm = new HashMap();
-        hm.put("bType", bts);
-        hm.put("ins", institution);
-        hm.put("fromDate", fromDate);
-        hm.put("toDate", toDate);
-        return getBillFacade().findAggregates(sql, hm, TemporalType.TIMESTAMP);
-
+//        BillType[] billTypes = {BillType.ChannelAgent, BillType.ChannelCash, BillType.ChannelPaid, BillType.ChannelStaff};
+//        List<BillType> bts = Arrays.asList(billTypes);
+//
+//        String sql = "Select b.toDepartment,"
+//                + " sum(b.netTotal) "
+//                + " from Bill b "
+//                + " where b.retired=false"
+//                //                + " and b.cancelled=false "
+//                //                + " and b.refunded=false "
+//                + " and  b.billType in :bType"
+//                + " and b.department.institution=:ins "
+//                + " and b.createdAt between :fromDate and :toDate "
+//                + " group by b.department"
+//                + " order by b.department.name";
+//
+//        HashMap hm = new HashMap();
+//        hm.put("bType", bts);
+//        hm.put("ins", institution);
+//        hm.put("fromDate", fromDate);
+//        hm.put("toDate", toDate);
+//        return getBillFacade().findAggregates(sql, hm, TemporalType.TIMESTAMP);
+        return null;
     }
 
     public List<Item> fetchBilledOpdItem(Category d, Date fromDate, Date toDate, Institution institution) {
@@ -1781,7 +1781,7 @@ public class BillBeanController implements Serializable {
         return getBillFeeFacade().findAggregates(sql, temMap, TemporalType.TIMESTAMP);
 
     }
-    
+
     public List<Object[]> fetchBilledDepartmentItem(Date fromDate, Date toDate, Department department, BillType bt, boolean toDep) {
         String sql;
         Map temMap = new HashMap();

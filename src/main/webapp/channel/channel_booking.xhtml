@@ -552,6 +552,7 @@
                                            value="Add" process=":#{p:component('tabNewPt')} 
                                            :#{p:component('tabSearchPt')} btnAdd 
                                            :#{p:component('pgNewBookingDetail')}" 
+                                           onclick="if (! confirm('Are you sure?')) return false"
                                            update="gpThisBookingDetails dialogChannelAdded" style="float: right;" 
                                            action="#{channelBillController.add}" 
                                            oncomplete="PF('dlgAdd').show();">   
